@@ -1,0 +1,102 @@
+name: Deploy to AWS
+
+on:
+  push:
+    branches: [ master, development, staging ]
+  workflow_dispatch: # Allows manual triggering
+    inputs:
+      branch:
+        description: 'Branch to deploy'
+        required: true
+        type: choice
+        options:
+          - master
+          - development
+          - staging
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build project
+        run: npm run build
+        
+      - name: Determine deployment environment
+        id: env
+        run: |
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          
+          if [ "$BRANCH_NAME" = "master" ]; then
+            echo "environment=production" >> $GITHUB_OUTPUT
+            echo "bucket=${{ secrets.S3_BUCKET_NAME_PROD || secrets.S3_BUCKET_NAME }}" >> $GITHUB_OUTPUT
+            echo "cloudfront=${{ secrets.CLOUDFRONT_DISTRIBUTION_ID_PROD || secrets.CLOUDFRONT_DISTRIBUTION_ID }}" >> $GITHUB_OUTPUT
+          elif [ "$BRANCH_NAME" = "staging" ]; then
+            echo "environment=staging" >> $GITHUB_OUTPUT
+            echo "bucket=${{ secrets.S3_BUCKET_NAME_STAGING }}" >> $GITHUB_OUTPUT
+            echo "cloudfront=${{ secrets.CLOUDFRONT_DISTRIBUTION_ID_STAGING }}" >> $GITHUB_OUTPUT
+          elif [ "$BRANCH_NAME" = "development" ]; then
+            echo "environment=development" >> $GITHUB_OUTPUT
+            echo "bucket=${{ secrets.S3_BUCKET_NAME_DEV || secrets.S3_BUCKET_NAME }}" >> $GITHUB_OUTPUT
+            echo "cloudfront=${{ secrets.CLOUDFRONT_DISTRIBUTION_ID_DEV }}" >> $GITHUB_OUTPUT
+          else
+            echo "environment=production" >> $GITHUB_OUTPUT
+            echo "bucket=${{ secrets.S3_BUCKET_NAME }}" >> $GITHUB_OUTPUT
+            echo "cloudfront=${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}" >> $GITHUB_OUTPUT
+          fi
+          
+          echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
+        
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION || 'us-east-1' }}
+          
+      - name: Deploy to S3
+        run: |
+          echo "🚀 Deploying ${{ steps.env.outputs.environment }} environment..."
+          echo "📦 Using bucket: ${{ steps.env.outputs.bucket }}"
+          
+          # Upload static assets with long cache
+          aws s3 sync dist/ s3://${{ steps.env.outputs.bucket }}/ \
+            --delete \
+            --cache-control "public, max-age=31536000, immutable" \
+            --exclude "*.html"
+          
+          # Upload HTML files with no cache
+          aws s3 sync dist/ s3://${{ steps.env.outputs.bucket }}/ \
+            --delete \
+            --cache-control "public, max-age=0, must-revalidate" \
+            --include "*.html"
+          
+      - name: Invalidate CloudFront cache
+        if: steps.env.outputs.cloudfront != ''
+        run: |
+          echo "🔄 Invalidating CloudFront cache..."
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ steps.env.outputs.cloudfront }} \
+            --paths "/*"
+          
+      - name: Deployment summary
+        run: |
+          echo "✅ Deployment completed successfully!"
+          echo "🌍 Environment: ${{ steps.env.outputs.environment }}"
+          echo "🌿 Branch: ${{ steps.env.outputs.branch }}"
+          echo "📦 S3 Bucket: ${{ steps.env.outputs.bucket }}"
+          if [ "${{ steps.env.outputs.cloudfront }}" != "" ]; then
+            echo "🌐 CloudFront: ${{ steps.env.outputs.cloudfront }}"
+          fi

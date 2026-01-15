@@ -1,0 +1,52 @@
+{
+  "organizations": [
+    {
+      "name": "Sea Turtle Conservancy",
+      "url": "https://www.conserveturtles.org/",
+      "description": "The world's oldest sea turtle research and conservation group",
+      "focus": "Sea turtle research, conservation, and education",
+      "verified": true,
+      "type": "conservation"
+    },
+    {
+      "name": "Turtle Conservancy",
+      "url": "https://www.turtleconservancy.org/",
+      "description": "Global turtle and tortoise conservation organization",
+      "focus": "Global turtle and tortoise protection",
+      "verified": true,
+      "type": "conservation"
+    },
+    {
+      "name": "World Wildlife Fund - Sea Turtle Conservation",
+      "url": "https://www.worldwildlife.org/species/sea-turtle",
+      "description": "WWF's global sea turtle conservation program",
+      "focus": "Sea turtle habitat protection and conservation",
+      "verified": true,
+      "type": "conservation"
+    },
+    {
+      "name": "Turtle Survival Alliance",
+      "url": "https://www.turtlesurvival.org/",
+      "description": "Global turtle conservation organization focused on preventing extinctions",
+      "focus": "Endangered turtle species protection",
+      "verified": true,
+      "type": "conservation"
+    },
+    {
+      "name": "Sea Turtle.org",
+      "url": "https://www.seaturtle.org/",
+      "description": "Sea turtle research and conservation network",
+      "focus": "Sea turtle research and data sharing",
+      "verified": true,
+      "type": "conservation"
+    },
+    {
+      "name": "Sea Turtle Status",
+      "url": "https://www.seaturtlestatus.org/",
+      "description": "Global sea turtle status and conservation information",
+      "focus": "Sea turtle population status and monitoring",
+      "verified": true,
+      "type": "conservation"
+    }
+  ]
+}

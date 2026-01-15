@@ -1,0 +1,12 @@
+<svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="600" height="400" fill="#e8f5e9" stroke="#4caf50" stroke-width="2" stroke-dasharray="10,5"/>
+  <text x="300" y="180" font-family="Arial, sans-serif" font-size="24" fill="#66bb6a" text-anchor="middle" font-weight="bold">
+    Image Placeholder
+  </text>
+  <text x="300" y="220" font-family="Arial, sans-serif" font-size="16" fill="#81c784" text-anchor="middle">
+    Replace with actual image
+  </text>
+  <text x="300" y="250" font-family="Arial, sans-serif" font-size="14" fill="#a5d6a7" text-anchor="middle">
+    600 x 400 pixels
+  </text>
+</svg>

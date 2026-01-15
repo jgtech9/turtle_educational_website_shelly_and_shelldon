@@ -1,0 +1,41 @@
+{
+  "organizations": [
+    {
+      "name": "Sea Turtle Conservancy - Donate",
+      "url": "https://www.conserveturtles.org/donate/",
+      "description": "Support sea turtle research and conservation",
+      "focus": "Sea turtle conservation fundraising",
+      "verified": true,
+      "type": "fundraising",
+      "donationLink": true
+    },
+    {
+      "name": "Turtle Conservancy - Support",
+      "url": "https://www.turtleconservancy.org/get-involved/",
+      "description": "Support global turtle and tortoise conservation",
+      "focus": "Turtle conservation fundraising",
+      "verified": true,
+      "type": "fundraising",
+      "donationLink": true
+    },
+    {
+      "name": "World Wildlife Fund - Adopt a Sea Turtle",
+      "url": "https://gifts.worldwildlife.org/gift-center/gifts/Species-Adoptions/Sea-Turtle.aspx",
+      "description": "Symbolic adoption program to support sea turtle conservation",
+      "focus": "Sea turtle conservation through symbolic adoption",
+      "verified": true,
+      "type": "fundraising",
+      "donationLink": true
+    },
+    {
+      "name": "Turtle Survival Alliance - Donate",
+      "url": "https://www.turtlesurvival.org/donate/",
+      "description": "Support endangered turtle species protection",
+      "focus": "Endangered turtle species fundraising",
+      "verified": true,
+      "type": "fundraising",
+      "donationLink": true
+    }
+  ],
+  "note": "Always verify organizations before donating. These are suggested legitimate organizations, but users should research before making donations."
+}
